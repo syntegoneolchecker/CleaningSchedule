@@ -3,7 +3,7 @@ class CleaningSchedule {
         this.names = [];
         this.jobs = [];
         this.initializeEventListeners();
-        this.tryLoadFromFile();
+        this.loadFromLocalStorage();
     }
 
     initializeEventListeners() {
@@ -16,16 +16,30 @@ class CleaningSchedule {
         });
     }
 
-    async tryLoadFromFile() {
+    loadFromLocalStorage() {
         try {
-            const response = await fetch('CleaningScheduleLists.txt');
-            if (response.ok) {
-                const text = await response.text();
-                this.parseFileContent(text);
+            const savedNames = localStorage.getItem('cleaningScheduleNames');
+            const savedJobs = localStorage.getItem('cleaningScheduleJobs');
+            if (savedNames) {
+                this.names = savedNames.split(' ').filter(name => name);
+            }
+            if (savedJobs) {
+                this.jobs = savedJobs.split(' ').filter(job => job);
+            }
+            if (this.names.length || this.jobs.length) {
                 this.populateInputs();
             }
         } catch (error) {
-            console.log('No local file found or error loading file:', error);
+            console.log('Could not load from localStorage:', error);
+        }
+    }
+
+    saveToLocalStorage() {
+        try {
+            localStorage.setItem('cleaningScheduleNames', this.names.join(' '));
+            localStorage.setItem('cleaningScheduleJobs', this.jobs.join(' '));
+        } catch (error) {
+            console.log('Could not save to localStorage:', error);
         }
     }
 
@@ -66,6 +80,8 @@ class CleaningSchedule {
 
             this.names = namesInput.split(' ').filter(name => name);
             this.jobs = jobsInput.split(' ').filter(job => job);
+
+            this.saveToLocalStorage();
 
             if (this.names.length < 2) {
                 throw new Error('Please enter at least 2 names');
