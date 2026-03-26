@@ -216,19 +216,31 @@ header h1 {
 }
 
 #clearHistoryBtn {
-    background-color: #dc3545;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 100%;
+	background-color: transparent;
+	border: 1px solid #28323c;
+	border-radius: 0;
+	color: #28323c;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 0;
+	line-height: 1.5;
+	margin-right: var(--grid-gutter);
+	padding: 5px 20px;
+	text-align: center;
+	text-decoration: none;
+	text-transform: none;
+	transition: all 0.15s linear;
+	white-space: normal;
 }
 
 #clearHistoryBtn:hover {
-    background-color: #a71d2a;
+	background-color: rgba(0, 190, 130, 0);
+	border-color: #00be82;
+	color: #00be82;
+	text-decoration: none;
+	transform: scale(1);
 }
 
 @media (max-width: 900px) {
