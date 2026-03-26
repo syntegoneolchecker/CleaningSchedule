@@ -42,7 +42,7 @@ header h1 {
     position: absolute;
     right: calc(100% + 20px);
     top: 0;
-    left: 20px;
+    left: calc(420px - 50vw);
     display: flex;
     flex-direction: column;
     gap: 20px;
