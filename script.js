@@ -272,6 +272,7 @@ class CleaningSchedule {
         const people = new Set();
         const areas = new Set();
         const counts = {};
+        const noCleanLabel = 'No cleaning';
 
         for (const entry of this.history) {
             for (const a of entry.assignments) {
@@ -282,11 +283,22 @@ class CleaningSchedule {
                     counts[person][a.job] = (counts[person][a.job] || 0) + 1;
                 }
             }
+            if (entry.noCleaning) {
+                for (const person of entry.noCleaning) {
+                    people.add(person);
+                    if (!counts[person]) counts[person] = {};
+                    counts[person][noCleanLabel] = (counts[person][noCleanLabel] || 0) + 1;
+                }
+            }
         }
+
+        // Put regular areas sorted first, then "No cleaning" at the end
+        const sortedAreas = [...areas].sort();
+        sortedAreas.push(noCleanLabel);
 
         return {
             people: [...people].sort(),
-            areas: [...areas].sort(),
+            areas: sortedAreas,
             counts,
             totalSchedules: this.history.length
         };
