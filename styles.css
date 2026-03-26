@@ -12,23 +12,10 @@ body {
     line-height: 1.6;
 }
 
-.page-layout {
-    display: flex;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    gap: 20px;
-    align-items: flex-start;
-}
-
-.container {
-    flex: 1;
-    min-width: 0;
-    max-width: 800px;
-    padding: 20px;
-}
-
 header {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 20px 0;
     text-align: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
@@ -38,6 +25,29 @@ header {
 header h1 {
     color: #99E5CE;
     font-size: 2.5em;
+}
+
+.content-layout {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px 20px;
+}
+
+.container {
+    width: 100%;
+}
+
+.history-container {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    margin-left: 20px;
+    width: 320px;
+    background: #E1E1E1;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .input-section {
@@ -150,17 +160,6 @@ header h1 {
     margin-bottom: 20px;
 }
 
-.history-container {
-    width: 320px;
-    flex-shrink: 0;
-    background: #E1E1E1;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 20px;
-}
-
 .history-container h3 {
     color: #29323F;
     margin-bottom: 15px;
@@ -218,10 +217,10 @@ header h1 {
 #clearHistoryBtn {
     background-color: #dc3545;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 30px;
     border: none;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
     width: 100%;
@@ -232,20 +231,26 @@ header h1 {
 }
 
 @media (max-width: 900px) {
-    .page-layout {
-        flex-direction: column;
-        align-items: stretch;
+    .content-layout {
+        position: static;
+        padding: 0 20px 20px;
     }
 
     .history-container {
-        width: 100%;
         position: static;
+        width: 100%;
+        max-width: 800px;
+        margin: 20px auto 0;
     }
 }
 
 @media (max-width: 600px) {
-    .page-layout {
-        padding: 10px;
+    header {
+        padding: 10px 10px 0;
+    }
+
+    .content-layout {
+        padding: 0 10px 10px;
     }
 
     header h1 {
