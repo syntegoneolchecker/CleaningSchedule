@@ -159,6 +159,9 @@ class CleaningSchedule {
 
         // Show output section
         document.getElementById('output').style.display = 'block';
+
+        // Show celebration gif
+        document.getElementById('celebrationGif').style.display = 'block';
     }
 
     showError(message) {
