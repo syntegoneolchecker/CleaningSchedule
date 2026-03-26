@@ -40,10 +40,9 @@ header h1 {
 
 .charts-side {
     position: absolute;
-    right: 100%;
+    right: calc(100% + 20px);
     top: 0;
-    margin-right: 20px;
-    width: 380px;
+    left: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -69,15 +68,19 @@ header h1 {
 .heatmap-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 11px;
+    table-layout: fixed;
 }
 
 .heatmap-table th {
     background: #29323F;
     color: #99E5CE;
-    padding: 8px 6px;
+    padding: 5px 3px;
     text-align: center;
     font-weight: 600;
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
 
@@ -86,7 +89,7 @@ header h1 {
 }
 
 .heatmap-table td {
-    padding: 8px 6px;
+    padding: 4px 3px;
     text-align: center;
     font-weight: 700;
     border: 1px solid #ccc;
@@ -97,6 +100,8 @@ header h1 {
     text-align: left;
     font-weight: 600;
     color: #29323F;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
 
