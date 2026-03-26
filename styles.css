@@ -12,6 +12,7 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;    
     line-height: 1.6;
+    position: relative;
 }
 
 header {
@@ -130,11 +131,10 @@ header h1 {
 
 .celebration-gif {
     display: none;
-    position: fixed;
+    position: absolute;
     bottom: 20px;
     right: 20px;
     width: 200px;
-    z-index: 10;
 }
 
 .input-section {
