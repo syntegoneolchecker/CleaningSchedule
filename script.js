@@ -2,8 +2,10 @@ class CleaningSchedule {
     constructor() {
         this.names = [];
         this.jobs = [];
+        this.history = [];
         this.initializeEventListeners();
         this.loadFromLocalStorage();
+        this.loadHistory();
     }
 
     initializeEventListeners() {
@@ -13,6 +15,10 @@ class CleaningSchedule {
 
         document.getElementById('fileInput').addEventListener('change', (event) => {
             this.handleFileUpload(event);
+        });
+
+        document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+            this.clearHistory();
         });
     }
 
@@ -110,6 +116,9 @@ class CleaningSchedule {
                 }
             }
 
+            // Save to history
+            this.addToHistory(assignments, namesCopy);
+
             // Display results
             this.displayResults(shuffledNames, assignments, namesCopy);
             this.hideError();
@@ -160,6 +169,96 @@ class CleaningSchedule {
 
     hideError() {
         document.getElementById('error').style.display = 'none';
+    }
+
+    loadHistory() {
+        try {
+            const saved = localStorage.getItem('cleaningScheduleHistory');
+            this.history = saved ? JSON.parse(saved) : [];
+        } catch (error) {
+            console.log('Could not load history from localStorage:', error);
+            this.history = [];
+        }
+        this.displayHistory();
+    }
+
+    saveHistory() {
+        try {
+            localStorage.setItem('cleaningScheduleHistory', JSON.stringify(this.history));
+        } catch (error) {
+            console.log('Could not save history to localStorage:', error);
+        }
+    }
+
+    addToHistory(assignments, noCleaning) {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+
+        const entry = {
+            date: `${year}/${month}/${day}`,
+            assignments: assignments.map(a => ({
+                job: a.job,
+                person1: a.person1,
+                person2: a.person2
+            })),
+            noCleaning: [...noCleaning]
+        };
+
+        this.history.push(entry);
+        this.saveHistory();
+        this.displayHistory();
+    }
+
+    displayHistory() {
+        const list = document.getElementById('historyList');
+        list.innerHTML = '';
+
+        if (this.history.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'history-empty';
+            empty.textContent = 'No schedules generated yet.';
+            list.appendChild(empty);
+            return;
+        }
+
+        // Display newest first
+        for (let i = this.history.length - 1; i >= 0; i--) {
+            const entry = this.history[i];
+            const entryEl = document.createElement('div');
+            entryEl.className = 'history-entry';
+
+            const dateEl = document.createElement('div');
+            dateEl.className = 'history-date';
+            dateEl.textContent = entry.date;
+            entryEl.appendChild(dateEl);
+
+            entry.assignments.forEach(a => {
+                const line = document.createElement('div');
+                line.className = 'history-assignment';
+                line.textContent = `${a.job}: ${a.person1} & ${a.person2}`;
+                entryEl.appendChild(line);
+            });
+
+            if (entry.noCleaning && entry.noCleaning.length > 0) {
+                const noClean = document.createElement('div');
+                noClean.className = 'history-no-cleaning';
+                noClean.textContent = `No cleaning: ${entry.noCleaning.join(', ')}`;
+                entryEl.appendChild(noClean);
+            }
+
+            list.appendChild(entryEl);
+        }
+
+        // Scroll to top to show newest entry
+        list.scrollTop = 0;
+    }
+
+    clearHistory() {
+        this.history = [];
+        this.saveHistory();
+        this.displayHistory();
     }
 }
 

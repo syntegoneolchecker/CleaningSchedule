@@ -7,52 +7,60 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div style="display: flex; justify-content: space-between; align-items: center; width: 90%; margin: 0 auto">
-            <h1>ENG3-JP Cleaning Schedule</h1>
-            <img src="Images/broomCleanFull.gif" alt="Cleaning gif" style="width:20%">
-            </div>
-        </header>
+    <div class="page-layout">
+        <div class="container">
+            <header>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 90%; margin: 0 auto">
+                <h1>ENG3-JP Cleaning Schedule</h1>
+                <img src="Images/broomCleanFull.gif" alt="Cleaning gif" style="width:20%">
+                </div>
+            </header>
 
-        <div class="input-section">
-            <h3>Configuration</h3>
-            <div class="input-group">
-                <label for="namesInput">Names (space-separated):</label>
-                <input type="text" id="namesInput" placeholder="Name1 Name2 Name3 ...">
+            <div class="input-section">
+                <h3>Configuration</h3>
+                <div class="input-group">
+                    <label for="namesInput">Names (space-separated):</label>
+                    <input type="text" id="namesInput" placeholder="Name1 Name2 Name3 ...">
+                </div>
+                <div class="input-group">
+                    <label for="jobsInput">Cleaning Areas (space-separated):</label>
+                    <input type="text" id="jobsInput" placeholder="Area1 Area2 Area3 ...">
+                </div>
+                <div class="input-group">
+                    <label>Or load from file:</label>
+                    <input type="file" id="fileInput" accept=".txt">
+                </div>
+                <button id="generateBtn">Generate Schedule</button>
             </div>
-            <div class="input-group">
-                <label for="jobsInput">Cleaning Areas (space-separated):</label>
-                <input type="text" id="jobsInput" placeholder="Area1 Area2 Area3 ...">
+
+            <div id="output" class="output-section" style="display: none;">
+                <h3>Schedule Results</h3>
+                <div class="info-section">
+                    <h4>Names:</h4>
+                    <div id="namesList" class="item-list"></div>
+                </div>
+                <div class="info-section">
+                    <h4>Areas to clean:</h4>
+                    <div id="jobsList" class="item-list"></div>
+                </div>
+                <div class="schedule-section">
+                    <h4>Assignment:</h4>
+                    <div id="assignmentList"></div>
+                </div>
+                <div class="info-section">
+                    <h4>No cleaning:</h4>
+                    <div id="noCleaningList" class="item-list"></div>
+                </div>
             </div>
-            <div class="input-group">
-                <label>Or load from file:</label>
-                <input type="file" id="fileInput" accept=".txt">
-            </div>
-            <button id="generateBtn">Generate Schedule</button>
+
+            <div id="error" class="error-section" style="display: none;"></div>
         </div>
 
-        <div id="output" class="output-section" style="display: none;">
-            <h3>Schedule Results</h3>
-            <div class="info-section">
-                <h4>Names:</h4>
-                <div id="namesList" class="item-list"></div>
-            </div>
-            <div class="info-section">
-                <h4>Areas to clean:</h4>
-                <div id="jobsList" class="item-list"></div>
-            </div>
-            <div class="schedule-section">
-                <h4>Assignment:</h4>
-                <div id="assignmentList"></div>
-            </div>
-            <div class="info-section">
-                <h4>No cleaning:</h4>
-                <div id="noCleaningList" class="item-list"></div>
-            </div>
+        <div class="history-container">
+            <h3>Schedule History</h3>
+            <div id="historyList" class="history-list"></div>
+            <button id="clearHistoryBtn">Clear History</button>
         </div>
-
-        <div id="error" class="error-section" style="display: none;"></div>
     </div>
 
     <script src="script.js"></script>
