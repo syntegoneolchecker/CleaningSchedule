@@ -417,12 +417,16 @@ class CleaningSchedule {
         const canvas = document.getElementById('radarChart');
 
         if (people.length === 0 || areas.length === 0) {
-            canvas.style.display = 'none';
-            emptyMsg.style.display = 'block';
             if (this.radarChart) {
                 this.radarChart.destroy();
                 this.radarChart = null;
             }
+            canvas.style.display = 'none';
+            canvas.removeAttribute('width');
+            canvas.removeAttribute('height');
+            canvas.style.width = '';
+            canvas.style.height = '';
+            emptyMsg.style.display = 'block';
             return;
         }
 
