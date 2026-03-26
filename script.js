@@ -3,6 +3,7 @@ class CleaningSchedule {
         this.names = [];
         this.jobs = [];
         this.history = [];
+        this.radarChart = null;
         this.initializeEventListeners();
         this.loadFromLocalStorage();
         this.loadHistory();
@@ -143,17 +144,17 @@ class CleaningSchedule {
         // Display assignments
         const assignmentList = document.getElementById('assignmentList');
         assignmentList.innerHTML = '';
-        
+
         assignments.forEach(assignment => {
             const assignmentElement = document.createElement('div');
             assignmentElement.className = 'assignment-item';
-            assignmentElement.textContent = 
+            assignmentElement.textContent =
                 `Area to clean: ${assignment.job} ----> ${assignment.person1} and ${assignment.person2}`;
             assignmentList.appendChild(assignmentElement);
         });
 
         // Display no cleaning list
-        document.getElementById('noCleaningList').textContent = 
+        document.getElementById('noCleaningList').textContent =
             noCleaning.length > 0 ? noCleaning.join(' ') : 'None';
 
         // Show output section
@@ -171,6 +172,8 @@ class CleaningSchedule {
         document.getElementById('error').style.display = 'none';
     }
 
+    // ── History ──
+
     loadHistory() {
         try {
             const saved = localStorage.getItem('cleaningScheduleHistory');
@@ -180,6 +183,7 @@ class CleaningSchedule {
             this.history = [];
         }
         this.displayHistory();
+        this.updateCharts();
     }
 
     saveHistory() {
@@ -209,6 +213,7 @@ class CleaningSchedule {
         this.history.push(entry);
         this.saveHistory();
         this.displayHistory();
+        this.updateCharts();
     }
 
     displayHistory() {
@@ -251,7 +256,6 @@ class CleaningSchedule {
             list.appendChild(entryEl);
         }
 
-        // Scroll to top to show newest entry
         list.scrollTop = 0;
     }
 
@@ -259,6 +263,225 @@ class CleaningSchedule {
         this.history = [];
         this.saveHistory();
         this.displayHistory();
+        this.updateCharts();
+    }
+
+    // ── Chart data aggregation ──
+
+    aggregateHistory() {
+        const people = new Set();
+        const areas = new Set();
+        const counts = {};
+
+        for (const entry of this.history) {
+            for (const a of entry.assignments) {
+                areas.add(a.job);
+                for (const person of [a.person1, a.person2]) {
+                    people.add(person);
+                    if (!counts[person]) counts[person] = {};
+                    counts[person][a.job] = (counts[person][a.job] || 0) + 1;
+                }
+            }
+        }
+
+        return {
+            people: [...people].sort(),
+            areas: [...areas].sort(),
+            counts,
+            totalSchedules: this.history.length
+        };
+    }
+
+    updateCharts() {
+        this.renderHeatmap();
+        this.renderRadarChart();
+    }
+
+    // ── Heatmap ──
+
+    getHeatmapColor(count, maxCount) {
+        if (count === 0 || maxCount === 0) return { bg: '#f8f9fa', text: '#adb5bd' };
+
+        const ratio = count / maxCount;
+
+        // Green (low) → Yellow (mid) → Red (high)
+        let r, g, b;
+        if (ratio <= 0.5) {
+            const t = ratio / 0.5;
+            r = Math.round(76 + t * (255 - 76));
+            g = Math.round(175 + t * (210 - 175));
+            b = Math.round(80 - t * 40);
+        } else {
+            const t = (ratio - 0.5) / 0.5;
+            r = Math.round(255 - t * 35);
+            g = Math.round(210 - t * 145);
+            b = Math.round(40 - t * 10);
+        }
+
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        const textColor = luminance > 0.5 ? '#29323F' : '#ffffff';
+
+        return { bg: `rgb(${r}, ${g}, ${b})`, text: textColor };
+    }
+
+    renderHeatmap() {
+        const wrapper = document.getElementById('heatmapWrapper');
+        const { people, areas, counts, totalSchedules } = this.aggregateHistory();
+
+        if (people.length === 0 || areas.length === 0) {
+            wrapper.innerHTML = '<div class="history-empty">No data yet.</div>';
+            return;
+        }
+
+        // maxCount = totalSchedules since a person can be assigned to an area at most once per schedule
+        const maxCount = totalSchedules;
+
+        const table = document.createElement('table');
+        table.className = 'heatmap-table';
+
+        // Header row
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        const nameHeader = document.createElement('th');
+        nameHeader.className = 'heatmap-name-header';
+        nameHeader.textContent = 'Person';
+        headerRow.appendChild(nameHeader);
+
+        for (const area of areas) {
+            const th = document.createElement('th');
+            th.textContent = area;
+            headerRow.appendChild(th);
+        }
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Data rows
+        const tbody = document.createElement('tbody');
+        for (const person of people) {
+            const row = document.createElement('tr');
+
+            const nameCell = document.createElement('td');
+            nameCell.className = 'heatmap-name';
+            nameCell.textContent = person;
+            row.appendChild(nameCell);
+
+            for (const area of areas) {
+                const count = (counts[person] && counts[person][area]) || 0;
+                const { bg, text } = this.getHeatmapColor(count, maxCount);
+
+                const cell = document.createElement('td');
+                cell.textContent = count;
+                cell.style.backgroundColor = bg;
+                cell.style.color = text;
+                row.appendChild(cell);
+            }
+
+            tbody.appendChild(row);
+        }
+        table.appendChild(tbody);
+
+        wrapper.innerHTML = '';
+        wrapper.appendChild(table);
+    }
+
+    // ── Radar chart ──
+
+    generatePersonColors(count) {
+        const colors = [];
+        for (let i = 0; i < count; i++) {
+            const hue = Math.round((i * 360) / count);
+            // Avoid near-white: saturation 70%, lightness 45%
+            colors.push({
+                solid: `hsl(${hue}, 70%, 45%)`,
+                transparent: `hsla(${hue}, 70%, 45%, 0.15)`
+            });
+        }
+        return colors;
+    }
+
+    renderRadarChart() {
+        const { people, areas, counts, totalSchedules } = this.aggregateHistory();
+        const emptyMsg = document.getElementById('radarEmpty');
+        const canvas = document.getElementById('radarChart');
+
+        if (people.length === 0 || areas.length === 0) {
+            canvas.style.display = 'none';
+            emptyMsg.style.display = 'block';
+            if (this.radarChart) {
+                this.radarChart.destroy();
+                this.radarChart = null;
+            }
+            return;
+        }
+
+        canvas.style.display = 'block';
+        emptyMsg.style.display = 'none';
+
+        const colors = this.generatePersonColors(people.length);
+
+        const datasets = people.map((person, i) => ({
+            label: person,
+            data: areas.map(area => (counts[person] && counts[person][area]) || 0),
+            borderColor: colors[i].solid,
+            backgroundColor: colors[i].transparent,
+            borderWidth: 2,
+            pointBackgroundColor: colors[i].solid,
+            pointRadius: 3
+        }));
+
+        const config = {
+            type: 'radar',
+            data: {
+                labels: areas,
+                datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: totalSchedules,
+                        ticks: {
+                            stepSize: 1,
+                            backdropColor: 'transparent',
+                            color: '#495057',
+                            font: { size: 10 }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        angleLines: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        pointLabels: {
+                            color: '#29323F',
+                            font: { size: 12, weight: '600' }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#29323F',
+                            padding: 12,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        };
+
+        if (this.radarChart) {
+            this.radarChart.data = config.data;
+            this.radarChart.options = config.options;
+            this.radarChart.update();
+        } else {
+            this.radarChart = new Chart(canvas, config);
+        }
     }
 }
 

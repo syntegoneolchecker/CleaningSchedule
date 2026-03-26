@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENG3-JP Cleaning Schedule</title>
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=4">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <header>
@@ -15,6 +16,22 @@
     </header>
 
     <div class="content-layout">
+        <div class="charts-side">
+            <div class="chart-container">
+                <h3>Assignment Heatmap</h3>
+                <div id="heatmapWrapper" class="heatmap-wrapper">
+                    <div class="history-empty">No data yet.</div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <h3>Radar Overview</h3>
+                <div id="radarWrapper" class="radar-wrapper">
+                    <canvas id="radarChart"></canvas>
+                    <div id="radarEmpty" class="history-empty">No data yet.</div>
+                </div>
+            </div>
+        </div>
+
         <div class="container">
             <div class="input-section">
                 <h3>Configuration</h3>
@@ -63,6 +80,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
 </body>
 </html>

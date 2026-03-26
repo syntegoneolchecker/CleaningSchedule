@@ -38,6 +38,77 @@ header h1 {
     width: 100%;
 }
 
+.charts-side {
+    position: absolute;
+    right: 100%;
+    top: 0;
+    margin-right: 20px;
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.chart-container {
+    background: #E1E1E1;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.chart-container h3 {
+    color: #29323F;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.heatmap-wrapper {
+    overflow-x: auto;
+}
+
+.heatmap-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.heatmap-table th {
+    background: #29323F;
+    color: #99E5CE;
+    padding: 8px 6px;
+    text-align: center;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.heatmap-table th.heatmap-name-header {
+    text-align: left;
+}
+
+.heatmap-table td {
+    padding: 8px 6px;
+    text-align: center;
+    font-weight: 700;
+    border: 1px solid #ccc;
+}
+
+.heatmap-table td.heatmap-name {
+    background: #f8f9fa;
+    text-align: left;
+    font-weight: 600;
+    color: #29323F;
+    white-space: nowrap;
+}
+
+.radar-wrapper {
+    position: relative;
+}
+
+.radar-wrapper canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
 .history-container {
     position: absolute;
     left: 100%;
@@ -246,6 +317,13 @@ header h1 {
     .content-layout {
         position: static;
         padding: 0 20px 20px;
+    }
+
+    .charts-side {
+        position: static;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto 20px;
     }
 
     .history-container {
