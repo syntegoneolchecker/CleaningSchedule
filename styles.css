@@ -101,7 +101,6 @@ header h1 {
 .info-section {
     margin-bottom: 20px;
     padding: 15px;
-    background: #f8f9fa;
     border-radius: 5px;
 }
 
@@ -128,7 +127,7 @@ header h1 {
     background: #CDF2E5;
     border-left: 4px solid #01BE83;
     border-radius: 3px;
-    font-family: monospace;
+    font-weight: bold;
 }
 
 .error-section {
