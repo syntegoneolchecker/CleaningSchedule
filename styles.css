@@ -132,8 +132,8 @@ header h1 {
 .celebration-gif {
     display: none;
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    bottom: 0px;
+    right: 60px;
     width: 200px;
 }
 
