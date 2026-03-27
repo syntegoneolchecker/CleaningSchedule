@@ -134,7 +134,7 @@ class CleaningSchedule {
                 spread: 180,
                 particleCount: 30,
                 origin: { y: -0.1 },
-                startVelocity: -35,
+                startVelocity: -30,
                 shapes: [syntegonS],
                 colors: ['#00be82']
             });
