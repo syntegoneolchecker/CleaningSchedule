@@ -156,23 +156,49 @@ class CleaningSchedule {
             confetti({
                 scalar: 1.33,
                 spread: 190,
-                particleCount: 40,
+                particleCount: 50,
                 origin: { y: -0.1 },
                 startVelocity: -35,
                 shapes: [syntegonS, syntegonY, syntegonN, syntegonT, syntegonE, syntegonG, syntegonO],
                 colors: ['#00be82']
             });
 
-            confetti({
-                particleCount: 100,
-                spread: 190,
-                origin: { y: -0.1 },
+            var count = 200;
+            var defaults = {
+                origin: { y: -0.1 }
+            };
+            
+            function fire(particleRatio, opts) {
+                confetti({
+                    ...defaults,
+                    particleCount: Math.floor(count * particleRatio)
+                });
+            }
+            
+            fire(0.25, {
+                spread: 26,
+                startVelocity: -55
+            });
+            fire(0.2, {
+                spread: 60,
+                startVelocity: -30
+            });
+            fire(0.35, {
+                spread: 100,
+                decay: 0.91,
+                scalar: 0.8,
                 startVelocity: -35
             });
-
-            var defaults = {
-
-            };
+            fire(0.1, {
+                spread: 120,
+                startVelocity: -25,
+                decay: 0.92,
+                scalar: 1.2
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: -45
+            });
 
         } catch (error) {
             this.showError(error.message);
