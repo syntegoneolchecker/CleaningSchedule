@@ -177,27 +177,27 @@ class CleaningSchedule {
             }
             
             fire(0.25, {
-                spread: 26,
+                spread: 46,
                 startVelocity: -35,
             });
             fire(0.2, {
-                spread: 60,
+                spread: 90,
                 startVelocity: -30,
             });
             fire(0.35, {
-                spread: 100,
+                spread: 140,
                 decay: 0.91,
                 scalar: 0.8,
                 startVelocity: -30,
             });
             fire(0.1, {
-                spread: 120,
+                spread: 190,
                 startVelocity: -20,
                 decay: 0.92,
                 scalar: 1.2
             });
             fire(0.1, {
-                spread: 120,
+                spread: 190,
                 startVelocity: -40,
             });
 
