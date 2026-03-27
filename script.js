@@ -171,6 +171,7 @@ class CleaningSchedule {
             function fire(particleRatio, opts) {
                 confetti({
                     ...defaults,
+                    ...opts,
                     particleCount: Math.floor(count * particleRatio)
                 });
             }
