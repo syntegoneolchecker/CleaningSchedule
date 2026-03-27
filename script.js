@@ -158,7 +158,7 @@ class CleaningSchedule {
                 spread: 190,
                 particleCount: 50,
                 origin: { y: -0.1 },
-                startVelocity: -35,
+                startVelocity: -30,
                 shapes: [syntegonS, syntegonY, syntegonN, syntegonT, syntegonE, syntegonG, syntegonO],
                 colors: ['#00be82']
             });
@@ -178,7 +178,7 @@ class CleaningSchedule {
             
             fire(0.25, {
                 spread: 26,
-                startVelocity: -55,
+                startVelocity: -35,
             });
             fire(0.2, {
                 spread: 60,
@@ -188,17 +188,17 @@ class CleaningSchedule {
                 spread: 100,
                 decay: 0.91,
                 scalar: 0.8,
-                startVelocity: -35,
+                startVelocity: -30,
             });
             fire(0.1, {
                 spread: 120,
-                startVelocity: -25,
+                startVelocity: -20,
                 decay: 0.92,
                 scalar: 1.2
             });
             fire(0.1, {
                 spread: 120,
-                startVelocity: -45,
+                startVelocity: -40,
             });
 
         } catch (error) {
