@@ -163,6 +163,13 @@ class CleaningSchedule {
                 colors: ['#00be82']
             });
 
+            confetti({
+                particleCount: 100,
+                spread: 190,
+                origin: { y: -0.1 },
+                startVelocity: -35
+            });
+
             var defaults = {
 
             };
