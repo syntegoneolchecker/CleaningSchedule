@@ -254,7 +254,7 @@ header h1 {
 }
 
 .history-list {
-    max-height: 500px;
+    max-height: 777px;
     overflow-y: auto;
     margin-bottom: 15px;
 }
